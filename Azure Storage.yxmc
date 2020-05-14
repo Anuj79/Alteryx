@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<AlteryxDocument yxmdVer="2019.3">
+  <Nodes>
+    <Node ToolID="1">
+      <GuiSettings Plugin="AlteryxGuiToolkit.Questions.Tab.Tab">
+        <Position x="0" y="0" width="59" height="59" />
+      </GuiSettings>
+      <Properties>
+        <Configuration />
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="2">
+      <GuiSettings Plugin="JupyterCode">
+        <Position x="270" y="114" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <productionModeScript />
+          <Notebook><![CDATA[{"cells":[{"cell_type":"markdown","metadata":{},"source":["Run `Alteryx.help()` for info about useful functions.  \n","i.e., `Alteryx.read(\"#1\")`, `Alteryx.write(df,1)`, `Alteryx.installPackages(\"eli5\")`"]},{"cell_type":"code","execution_count":1,"metadata":{},"outputs":[],"source":["#Alteryx.installPackages(\"azure-storage-file-datalake\")\n","from ayx import Alteryx\n","import pandas as pd\n","import os, uuid, sys\n","from azure.storage.filedatalake import DataLakeServiceClient\n","from azure.core._match_conditions import MatchConditions\n","from azure.storage.filedatalake._models import ContentSettings\n","\n","data = Alteryx.read(\"#1\")\n","#print ((data) )\n","\n","# calling Teradata Uda\n","\n"," \n","storage_account_name=data.iloc[0][0]\n","storage_account_key=data.iloc[0][1]\n","blob_container=data.iloc[0][2]\n","file_folder=data.iloc[0][3]\n","filename=data.iloc[0][4]\n","localfilename=data.iloc[0][5]\n","\n","try:  \n","    global service_client\n","        \n","    service_client = DataLakeServiceClient(account_url=\"{}://{}.dfs.core.windows.net\".format(\n","        \"https\", storage_account_name), credential=storage_account_key)\n","    \n","except Exception as e:\n","    print(e)\n","def download_file_from_directory():\n","    try:\n","        file_system_client = service_client.get_file_system_client(file_system=blob_container)\n","        directory_client = file_system_client.get_directory_client(file_folder)\n","        \n","        local_file = open(localfilename,'wb')\n","        file_client = directory_client.get_file_client(filename)\n","        download = file_client.download_file()\n","        downloaded_bytes = download.readall()\n","        local_file.write(downloaded_bytes)\n","        local_file.close()\n","        pdf= pd.read_csv(localfilename)\n","        Alteryx.write(pdf,1)\n","\t\t\n","    except Exception as e:\n","     print(e)\n","download_file_from_directory()\n","\n","#pdf= pd.DataFrame([[str(results.ProcessID)]],columns=['ProcessID'])\n"]},{"cell_type":"code","execution_count":null,"metadata":{},"outputs":[],"source":[]}],"metadata":{"kernelspec":{"display_name":"Python 3","language":"python","name":"python3"},"language_info":{"codemirror_mode":{"name":"ipython","version":3},"file_extension":".py","mimetype":"text/x-python","name":"python","nbconvert_exporter":"python","pygments_lexer":"ipython3","version":"3.6.8"}},"nbformat":4,"nbformat_minor":2}]]></Notebook>
+          <Port>53501</Port>
+          <WorkflowName>c:\users\p2845368\documents\alteryx\azure storage.yxmc</WorkflowName>
+          <specialCellMetadata>[{"label":"info","contents_keyword":"Alteryx.help()","cell_css":"border: 3px solid #357; margin: 4px; background: #fbffff","first_line":"Run `Alteryx.help()` for info about useful functions.","cell_type":"markdown","cell_class":"text_cell"},{"label":"deps","contents_keyword":"installPackages","cell_css":"border: 1px solid #58a; margin: 2px;","first_line":"# List all non-standard packages to be imported by your","cell_type":"code","cell_class":"code_cell"}]</specialCellMetadata>
+          <AssetManaged>True</AssetManaged>
+          <JupyterProduction>False</JupyterProduction>
+          <SqliteOverride>true</SqliteOverride>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxJupyterPluginEngine.dll" EngineDllEntryPoint="AlteryxJupyter" />
+    </Node>
+    <Node ToolID="4">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.MacroOutput.MacroOutput">
+        <Position x="474" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Name>Output6</Name>
+          <Abbrev />
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxMacroOutput" />
+    </Node>
+    <Node ToolID="5">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.MacroInput.MacroInput">
+        <Position x="54" y="102" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <UseFileInput value="False" />
+          <Name>Input7</Name>
+          <Abbrev />
+          <ShowFieldMap value="True" />
+          <Optional value="False" />
+          <TextInput>
+            <Configuration>
+              <NumRows value="1" />
+              <Fields>
+                <Field name="Storage Account Name" />
+                <Field name="Storage Account Key" />
+                <Field name="Blob Container" />
+                <Field name="File Folder" />
+                <Field name="File Name" />
+                <Field name="Localfilename" />
+              </Fields>
+              <Data>
+                <r>
+                  <c>storage Account Name</c>
+                  <c>storage Account Key</c>
+                  <c>test</c>
+                  <c>Folder</c>
+                  <c>transactions.csv</c>
+                  <c>C:\\\python\\file-to-download.txt</c>
+                </r>
+              </Data>
+            </Configuration>
+          </TextInput>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText />
+          <Left value="True" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="Storage Account Name" size="20" source="TextInput:" type="String" />
+            <Field name="Storage Account Key" size="19" source="TextInput:" type="String" />
+            <Field name="Blob Container" size="4" source="TextInput:" type="String" />
+            <Field name="File Folder" size="6" source="TextInput:" type="String" />
+            <Field name="File Name" size="16" source="TextInput:" type="String" />
+            <Field name="Localfilename" size="33" source="TextInput:" type="String" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxMacroInput" />
+    </Node>
+  </Nodes>
+  <Connections>
+    <Connection>
+      <Origin ToolID="2" Connection="Output1" />
+      <Destination ToolID="4" Connection="Input" />
+    </Connection>
+    <Connection name="#1">
+      <Origin ToolID="5" Connection="Output" />
+      <Destination ToolID="2" Connection="Input" />
+    </Connection>
+  </Connections>
+  <Properties>
+    <Memory default="True" />
+    <GlobalRecordLimit value="0" />
+    <TempFiles default="True" />
+    <Annotation on="True" includeToolName="False" />
+    <ConvErrorLimit value="10" />
+    <ConvErrorLimit_Stop value="False" />
+    <CancelOnError value="False" />
+    <DisableBrowse value="False" />
+    <EnablePerformanceProfiling value="False" />
+    <DisableAllOutput value="False" />
+    <ShowAllMacroMessages value="False" />
+    <ShowConnectionStatusIsOn value="True" />
+    <ShowConnectionStatusOnlyWhenRunning value="True" />
+    <ZoomLevel value="0" />
+    <LayoutType>Horizontal</LayoutType>
+    <Constants>
+      <Constant>
+        <Namespace>Question</Namespace>
+        <Name>Macro Output (4)</Name>
+        <Value />
+        <IsNumeric value="False" />
+      </Constant>
+      <Constant>
+        <Namespace>Question</Namespace>
+        <Name>Macro Input (5)</Name>
+        <Value />
+        <IsNumeric value="False" />
+      </Constant>
+    </Constants>
+    <MetaInfo>
+      <NameIsFileName value="True" />
+      <Name>Azure Storage</Name>
+      <Description />
+      <RootToolName />
+      <ToolVersion />
+      <ToolInDb value="False" />
+      <CategoryName />
+      <SearchTags />
+      <Author />
+      <Company />
+      <Copyright />
+      <DescriptionLink actual="" displayed="" />
+      <Example>
+        <Description />
+        <File />
+      </Example>
+    </MetaInfo>
+    <Events>
+      <Enabled value="True" />
+    </Events>
+    <RuntimeProperties>
+      <Actions />
+      <Questions>
+        <Question>
+          <Type>Tab</Type>
+          <Description>Questions</Description>
+          <Name>Tab (1)</Name>
+          <ToolId value="1" />
+          <Questions>
+            <Question>
+              <Type>MacroOutput</Type>
+              <Description>Macro Output (6)</Description>
+              <Name>Macro Output (4)</Name>
+              <ToolId value="4" />
+            </Question>
+            <Question>
+              <Type>MacroInput</Type>
+              <Description>Macro Input (7)</Description>
+              <Name>Macro Input (5)</Name>
+              <ToolId value="5" />
+            </Question>
+          </Questions>
+        </Question>
+      </Questions>
+      <ModuleType>Macro</ModuleType>
+      <MacroCustomHelp value="False" />
+      <MacroDynamicOutputFields value="False" />
+      <MacroImageStd value="39" />
+      <MacroInputs />
+      <MacroOutputs />
+      <Wiz_CustomHelp value="False" />
+      <Wiz_CustomGraphic value="False" />
+      <Wiz_ShowOutput value="True" />
+      <Wiz_OpenOutputTools>
+        <Tool ToolId="2" Selected="True" />
+        <Tool ToolId="4" Selected="True" />
+        <Tool ToolId="5" Selected="True" />
+      </Wiz_OpenOutputTools>
+      <Wiz_OutputMessage />
+      <Wiz_NoOutputFilesMessage />
+      <Wiz_ChainRunWizard />
+    </RuntimeProperties>
+  </Properties>
+</AlteryxDocument>
